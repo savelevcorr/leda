@@ -195,6 +195,8 @@ export const AutoComplete = React.forwardRef((props: AutoCompleteProps, ref: Rea
     autoCompleteState,
   );
 
+  const suggestionListData = sortSuggestions ? [...suggestions].sort(sortSuggestions) : suggestions;
+
   return (
     <Div
       className={wrapperClassNames}
@@ -229,7 +231,7 @@ export const AutoComplete = React.forwardRef((props: AutoCompleteProps, ref: Rea
       </Div>
       <SuggestionList
         compareObjectsBy={compareObjectsBy}
-        data={suggestions}
+        data={suggestionListData}
         groupBy={groupBy}
         highlightedSuggestion={highlightedSuggestion}
         isLoading={isLoading}
@@ -241,7 +243,6 @@ export const AutoComplete = React.forwardRef((props: AutoCompleteProps, ref: Rea
         placeholder={placeholder}
         selectedSuggestion={selectedSuggestion}
         shouldAllowEmpty={false}
-        sortSuggestions={sortSuggestions}
         textField={textField}
         theme={theme}
         value={suggestionListValue}

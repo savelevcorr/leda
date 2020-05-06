@@ -133,11 +133,19 @@ export const DropDownSelect = React.forwardRef((props: DropDownSelectProps, ref:
 
   const shouldRenderClearIcon = !isDisabled && hasClearButton && (value !== null || filterValue !== null);
 
-  const suggestionListData = shouldFilterValues
-    ? filterData({
-      data, filterValue, textField, filterRule, searchFields,
-    })
-    : data;
+  const suggestionListData = (() => {
+    const filteredData = shouldFilterValues
+      ? filterData({
+        data, filterValue, textField, filterRule, searchFields,
+      })
+      : data;
+
+    if (sortSuggestions) {
+      return [...filteredData].sort(sortSuggestions);
+    }
+
+    return filteredData;
+  })();
 
   const handleInputClick = () => {
     mergeState({
@@ -199,7 +207,6 @@ export const DropDownSelect = React.forwardRef((props: DropDownSelectProps, ref:
         placeholder={placeholder}
         selectedSuggestion={selectedSuggestion}
         shouldAllowEmpty={shouldAllowEmpty}
-        sortSuggestions={sortSuggestions}
         textField={textField}
         theme={theme}
         value={value}
