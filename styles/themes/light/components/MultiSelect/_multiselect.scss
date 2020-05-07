@@ -82,5 +82,10 @@
         top: 0px;
       }
     }
+    .checkbox-label.semi {
+      &::after {
+        top: 8px;
+      }
+    }
   }
 }
