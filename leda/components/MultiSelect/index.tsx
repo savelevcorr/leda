@@ -12,10 +12,11 @@ import { SuggestionList } from '../../src/SuggestionList';
 import {
   createBlurHandler,
   createClearHandler,
-  createFocusHandler, createKeyDownHandler,
+  createFocusHandler,
+  createKeyDownHandler,
   createMouseDownHandler,
-  createSelectHandler,
   createResetHandler,
+  createSelectHandler,
 } from './handlers';
 import { TagsContainer } from './TagsContainer';
 import { Div } from '../Div';
@@ -26,6 +27,7 @@ import {
 } from './helpers';
 import { createCheckBoxesRender } from './renders';
 import { Span } from '../Span';
+import { selectAllSuggestion, SelectedState } from './constants';
 
 export const MultiSelect = React.forwardRef((props: MultiSelectProps, ref: React.Ref<MultiSelectRefCurrent>): React.ReactElement => {
   const {
@@ -58,7 +60,7 @@ export const MultiSelect = React.forwardRef((props: MultiSelectProps, ref: React
     onFocus,
     placeholder,
     requiredMessage,
-    selectAllRender,
+    selectAllItem,
     shouldHideInput,
     shouldKeepSuggestions,
     shouldSelectedGoFirst,
@@ -117,10 +119,11 @@ export const MultiSelect = React.forwardRef((props: MultiSelectProps, ref: React
   });
 
   const handleSelect = createSelectHandler(props, {
-    value,
-    setValue,
-    setFocused,
+    data,
     setFilterValue,
+    setFocused,
+    setValue,
+    value,
   });
 
   const handleKeyDown = createKeyDownHandler(props, {
@@ -208,6 +211,13 @@ export const MultiSelect = React.forwardRef((props: MultiSelectProps, ref: React
 
   const checkBoxesRender = createCheckBoxesRender({ theme });
 
+  const selectAllState = (() => {
+    if (canSelectAll == null) return undefined;
+    if (value.length === data?.length) return SelectedState.All;
+    if (value.length === 0) return SelectedState.Nothing;
+    return SelectedState.Some;
+  })();
+
   const suggestionListData = (() => {
     const allSuggestions = getSortedSuggestions({
       shouldSelectedGoFirst,
@@ -218,7 +228,7 @@ export const MultiSelect = React.forwardRef((props: MultiSelectProps, ref: React
 
     if (canSelectAll) {
       // todo: canSelectAll
-      return [...allSuggestions];
+      return [selectAllSuggestion, ...allSuggestions];
     }
 
     return allSuggestions;
@@ -302,6 +312,8 @@ export const MultiSelect = React.forwardRef((props: MultiSelectProps, ref: React
           listRender={listRender}
           noSuggestionsRender={noSuggestionsRender}
           onClick={handleSelect}
+          selectAllItem={selectAllItem}
+          selectAllState={selectAllState}
           selectedSuggestion={selectedSuggestions}
           shouldAllowEmpty={false}
           textField={textField}

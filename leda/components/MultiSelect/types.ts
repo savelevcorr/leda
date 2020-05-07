@@ -129,6 +129,8 @@ export interface MultiSelectProps<T extends MultiSelectValue | null | undefined 
   /** Реф */
   ref?: React.Ref<MultiSelectRefCurrent>,
   /** Отображать компонент без фильтра */
+  selectAllItem?: SuggestionListProps['selectAllItem'],
+  /** Отображать компонент без фильтра */
   shouldHideInput?: boolean,
   /** Постоянный список, элементы не исчезают при клике */
   shouldKeepSuggestions?: boolean,
@@ -187,6 +189,7 @@ export interface BlurData {
 }
 
 export interface SelectData {
+  data: MultiSelectProps['data'],
   setFilterValue: SetState<string>,
   setFocused: SetState<boolean>,
   setValue: SetState<MultiSelectValue>,
